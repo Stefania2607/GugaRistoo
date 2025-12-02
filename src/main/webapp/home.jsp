@@ -39,7 +39,7 @@ background: url('Images/chat.png') center/cover no-repeat fixed;
             text-align: center;
             border-radius: 20px;
             background: rgba(255, 255, 255, 0.12);
-            backdrop-filter: blur(14px);
+            backdrop-filter: blur(2px);
             border: 1px solid rgba(255, 255, 255, 0.25);
             box-shadow: 0 25px 50px rgba(0, 0, 0, 0.35);
             color: #fff;
@@ -51,7 +51,7 @@ background: url('Images/chat.png') center/cover no-repeat fixed;
         }
 
         p {
-            font-size: 18px;
+            font-size: 22px;
             opacity: 0.9;
             margin-bottom: 30px;
         }
@@ -80,7 +80,7 @@ background: url('Images/chat.png') center/cover no-repeat fixed;
 <body>
 
 <div class="card">
-    <h1>Benvenuto nell'area GugaRisto</h1>
+    <h1>Benvenuto nell'area GugaRisto'</h1>
 
     <p>
         Accesso effettuato con successo.<br>

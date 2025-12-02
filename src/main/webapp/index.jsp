@@ -47,7 +47,7 @@
 
             /* effetto vetro */
             background: rgba(255, 255, 255, 0.10);
-            backdrop-filter: blur(12px);
+            backdrop-filter: blur(2px);
             border: 1px solid rgba(255, 255, 255, 0.25);
             box-shadow: 0 20px 40px rgba(0,0,0,0.3);
         }
@@ -61,7 +61,7 @@
         }
 
         p {
-            font-size: 16px;
+            font-size: 22px;
             color: #f3f4f6;
             margin-bottom: 28px;
             line-height: 1.5;
@@ -92,7 +92,7 @@
 
 <div class="card">
 
-    <h1>Benvenuto in GugaRisto</h1>
+    <h1>Benvenuto in GugaRisto'</h1>
 
     <p>
         Tra luci calde e profumi intensi, <br>
