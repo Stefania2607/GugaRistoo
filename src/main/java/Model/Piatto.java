@@ -17,7 +17,7 @@ public class Piatto {
     private Categoria categoria;
     private boolean disponibile;
 
-    public Piatto(int id, String nome, double prezzo, Categoria categoria) {
+    public Piatto(int id, String nome, String descrizione, double prezzo, Categoria categoria) {
         if (id <= 0) {
             throw new IllegalArgumentException("Id piatto deve essere positivo.");
         }

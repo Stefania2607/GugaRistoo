@@ -3,10 +3,8 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
-    <title>GugaRisto – Benvenuto</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GugaRisto – Area Utente</title>
 
-    <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;700&display=swap" rel="stylesheet">
 
     <style>
@@ -19,19 +17,15 @@
             align-items: center;
             justify-content: center;
             font-family: "Cinzel", serif;
-
-            /* 👉 tua immagine qui */
-            background: url('Images/chat.png') center/cover no-repeat fixed;
-
+background: url('Images/chat.png') center/cover no-repeat fixed;
             position: relative;
         }
 
-        /* sfocatura elegante */
         body::before {
             content: "";
             position: absolute;
             inset: 0;
-            backdrop-filter: blur(2px);
+            backdrop-filter: blur(3px);
             background: rgba(0, 0, 0, 0.45);
             z-index: 1;
         }
@@ -40,48 +34,43 @@
             position: relative;
             z-index: 2;
             width: 90%;
-            max-width: 500px;
-            padding: 35px 40px;
+            max-width: 550px;
+            padding: 40px 45px;
             text-align: center;
             border-radius: 20px;
-
-            /* effetto vetro */
-            background: rgba(255, 255, 255, 0.10);
-            backdrop-filter: blur(12px);
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(14px);
             border: 1px solid rgba(255, 255, 255, 0.25);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.35);
+            color: #fff;
         }
 
         h1 {
-            font-size: 36px;
-            font-weight: 600;
+            font-size: 34px;
             margin-bottom: 10px;
-            color: #fff;
-            letter-spacing: 1px;
         }
 
         p {
-            font-size: 16px;
-            color: #f3f4f6;
-            margin-bottom: 28px;
-            line-height: 1.5;
+            font-size: 18px;
+            opacity: 0.9;
+            margin-bottom: 30px;
         }
 
-        a.cta {
+        a.btn {
             display: inline-block;
-            padding: 12px 28px;
-            background: #2b2b2b; /* grigio scuro */
+            padding: 12px 26px;
+            background: #2b2b2b;
             color: #fff;
             border-radius: 50px;
-            font-size: 18px;
             text-decoration: none;
             font-weight: bold;
+            font-size: 17px;
             transition: 0.2s ease;
             box-shadow: 0 4px 15px rgba(0,0,0,0.30);
         }
 
-        a.cta:hover {
-            background: #1f1f1f; /* grigio più scuro */
+        a.btn:hover {
+            background: #1a1a1a;
             transform: translateY(-3px);
             box-shadow: 0 10px 22px rgba(0,0,0,0.40);
         }
@@ -91,17 +80,17 @@
 <body>
 
 <div class="card">
-
-    <h1>Benvenuto in GugaRisto</h1>
+    <h1>Benvenuto nell'area GugaRisto</h1>
 
     <p>
-        Tra luci calde e profumi intensi, <br>
-        <strong>il tuo tavolo ti aspetta.</strong>
+        Accesso effettuato con successo.<br>
+        Scegli cosa desideri fare:
     </p>
 
-    <a href="home.jsp" class="cta">Entra nell'app</a>
-
-
+    <a href="/menu" class="btn">Visualizza Menu</a><br><br>
+    <a href="/prenotazioni" class="btn">Prenota un tavolo</a><br><br>
+    <a href="/ordini" class="btn">Ordini effetuati</a><br><br>
+    <a href="/logout" class="btn">Esci</a>
 </div>
 
 </body>
