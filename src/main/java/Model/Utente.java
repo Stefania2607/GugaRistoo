@@ -1,4 +1,4 @@
-package it.gugaristo.Entity;
+package Model;
 
 public class Utente {
 

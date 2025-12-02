@@ -1,4 +1,4 @@
-package it.gugaristo.entity;
+package Model;
 
 public enum TipoOrdine {
     ALL_ARRIVO,
