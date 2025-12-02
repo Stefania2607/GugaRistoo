@@ -20,7 +20,7 @@ public class Piatto {
     public Piatto(int id, String nome, double prezzo, Categoria categoria) {
         if (id <= 0) {
             throw new IllegalArgumentException("Id piatto deve essere positivo.");
-        }//ciao
+        }//ciaoooo
         if (nome == null || nome.isBlank()) {
             throw new IllegalArgumentException("Nome piatto non può essere vuoto.");
         }
