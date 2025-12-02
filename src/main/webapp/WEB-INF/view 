@@ -1,0 +1,12 @@
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>GugaRisto – Home</title>
+</head>
+<body>
+<h2>Area applicazione GugaRisto</h2>
+<p>Qui metteremo il menu per Cliente / Cameriere / Admin.</p>
+</body>
+</html>
