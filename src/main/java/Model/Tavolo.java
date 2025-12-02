@@ -1,21 +1,18 @@
 package Model;
-
 public class Tavolo {
 
     private final int id;
     private final int numeroPosti;
-    private boolean occupato;
+    private StatoTavolo stato;
+    private Utente cameriereAssegnato; // solo CAMERIERE
 
     public Tavolo(int id, int numeroPosti) {
-        if (id <= 0) {
-            throw new IllegalArgumentException("Id tavolo deve essere positivo.");
-        }
-        if (numeroPosti <= 0) {
-            throw new IllegalArgumentException("Numero posti deve essere positivo.");
-        }
+        if (id <= 0) throw new IllegalArgumentException("Id tavolo deve essere positivo.");
+        if (numeroPosti <= 0) throw new IllegalArgumentException("Numero posti deve essere positivo.");
+
         this.id = id;
         this.numeroPosti = numeroPosti;
-        this.occupato = false;
+        this.stato = StatoTavolo.LIBERO;
     }
 
     public int getId() {
@@ -26,16 +23,20 @@ public class Tavolo {
         return numeroPosti;
     }
 
-    public boolean isOccupato() {
-        return occupato;
+    public StatoTavolo getStato() {
+        return stato;
     }
 
-    public void occupa() {
-        this.occupato = true;
+    public void setStato(StatoTavolo stato) {
+        this.stato = stato;
     }
 
-    public void libera() {
-        this.occupato = false;
+    public Utente getCameriereAssegnato() {
+        return cameriereAssegnato;
+    }
+
+    public void setCameriereAssegnato(Utente cameriere) {
+        this.cameriereAssegnato = cameriere;
     }
 
     @Override
@@ -43,8 +44,8 @@ public class Tavolo {
         return "Tavolo{" +
                 "id=" + id +
                 ", numeroPosti=" + numeroPosti +
-                ", occupato=" + occupato +
+                ", stato=" + stato +
+                ", cameriere=" + (cameriereAssegnato != null ? cameriereAssegnato.getUsername() : "Nessuno") +
                 '}';
     }
 }
-
