@@ -83,14 +83,15 @@ background: url('Images/chat.png') center/cover no-repeat fixed;
     <h1>Benvenuto nell'area GugaRisto'</h1>
 
     <p>
-        Accesso effettuato con successo.<br>
+
         Scegli cosa desideri fare:
     </p>
 
-    <a href="/menu" class="btn">Visualizza Menu</a><br><br>
-    <a href="/prenotazioni" class="btn">Prenota un tavolo</a><br><br>
-    <a href="/ordini" class="btn">Ordini effetuati</a><br><br>
-    <a href="/logout" class="btn">Esci</a>
+    <a href="menu" class="btn">Visualizza Menu</a><br><br>
+    <a href="prenotazioni" class="btn">Prenota un tavolo</a><br><br>
+    <a href="ordini" class="btn">Ordini effettuati</a><br><br>
+    <a href="logout" class="btn">Esci</a>
+
 </div>
 
 </body>
