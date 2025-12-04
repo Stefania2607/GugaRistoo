@@ -8,7 +8,7 @@ public class ConnectionFactory {
 
     // Parametri di connessione (adatta a quello che hai su MySQL)
     private static final String URL =
-            "jdbc:mysql://localhost:3306/ristorante?useSSL=false&serverTimezone=UTC";
+            "jdbc:mysql://localhost:3306/ristorante?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true";
     private static final String USER = "root";
     private static final String PASSWORD = "root";
 
