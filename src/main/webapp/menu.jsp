@@ -20,6 +20,18 @@
         * {
             box-sizing: border-box;
         }
+        .dolci-link {
+            color: #f28bb3;    /* esempio: rosa per dolci */
+        }
+
+        .bevande-link {
+            color: #f2b66d;    /* arancio-dorato che sta bene vicino al rosa */
+        }
+
+        .bevande-link:hover {
+            text-shadow: 0 0 6px #f2b66d;
+        }
+
 
         html, body {
             margin: 0;
@@ -401,6 +413,8 @@
             <button class="tab-btn" data-target="secondo">Secondi</button>
             <button class="tab-btn" data-target="contorno">Contorni</button>
             <button class="tab-btn" data-target="dolce">Dolci</button>
+             <a href="<%= contextPath %>/bevande" class="tab-btn bevande-link">Bevande</a>
+
         </div>
 
         <%
@@ -409,7 +423,7 @@
                     {"primo", "Primi"},
                     {"secondo", "Secondi"},
                     {"contorno", "Contorni"},
-                    {"dolce", "Dolci"}
+                    {"dolce", "Dolci"},
             };
 
             for (String[] sec : sezioni) {

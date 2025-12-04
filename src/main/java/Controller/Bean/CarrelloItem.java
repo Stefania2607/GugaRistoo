@@ -1,5 +1,7 @@
 package Controller.Bean;
 
+import java.math.BigDecimal;
+
 public class CarrelloItem {
 
     private Piatto piatto;
@@ -36,7 +38,8 @@ public class CarrelloItem {
         }
     }
 
-    public double getSubtotale() {
-        return piatto.getPrezzo() * quantita;
+    public BigDecimal getSubtotal() {
+        return piatto.getPrezzo().multiply(BigDecimal.valueOf(quantita));
     }
+
 }

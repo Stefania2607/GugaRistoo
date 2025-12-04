@@ -1,11 +1,13 @@
 package Controller.Bean;
 
+import java.math.BigDecimal;
+
 public class Piatto {
 
     private int id;
     private String nome;
     private String descrizione;
-    private double prezzo;
+    private BigDecimal prezzo;
     private String categoria;
     private String ingredienti;
     private String immagineUrl;
@@ -36,11 +38,11 @@ public class Piatto {
         this.descrizione = descrizione;
     }
 
-    public double getPrezzo() {
+    public BigDecimal getPrezzo() {
         return prezzo;
     }
 
-    public void setPrezzo(double prezzo) {
+    public void setPrezzo(BigDecimal prezzo) {
         this.prezzo = prezzo;
     }
 
@@ -67,5 +69,15 @@ public class Piatto {
     public void setImmagineUrl(String immagineUrl) {
         this.immagineUrl = immagineUrl;
     }
+    private String tipoBevanda;
+
+    public String getTipoBevanda() {
+        return tipoBevanda;
+    }
+
+    public void setTipoBevanda(String tipoBevanda) {
+        this.tipoBevanda = tipoBevanda;
+    }
+
 
 }

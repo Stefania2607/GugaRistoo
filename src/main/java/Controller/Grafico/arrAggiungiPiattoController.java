@@ -9,9 +9,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.math.BigDecimal;
 
 @WebServlet("/aggiungiPiatto")
-public class AggiungiPiattoController extends HttpServlet {
+public class arrAggiungiPiattoController extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request,
@@ -23,7 +24,9 @@ public class AggiungiPiattoController extends HttpServlet {
 
         Piatto p = new Piatto();
         p.setNome(nome);
-        p.setPrezzo(Double.parseDouble(prezzo));
+        String prezzoString = request.getParameter("prezzo");
+        p.setPrezzo(new BigDecimal(prezzoString));
+
 
         new PiattoDAO().insert(p);
 
