@@ -89,8 +89,6 @@ background: url('Images/chat.png') center/cover no-repeat fixed;
 
     <a href="menu" class="btn">Visualizza Menu</a><br><br>
     <a href="prenotazioni" class="btn">Prenota un tavolo</a><br><br>
-    <a href="ordini" class="btn">Ordini effettuati</a><br><br>
-    <a href="logout" class="btn">Esci</a>
 
 </div>
 

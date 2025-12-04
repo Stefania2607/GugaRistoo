@@ -67,4 +67,5 @@ public class Piatto {
     public void setImmagineUrl(String immagineUrl) {
         this.immagineUrl = immagineUrl;
     }
+
 }
