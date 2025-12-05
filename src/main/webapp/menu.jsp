@@ -1,10 +1,15 @@
 <%@ page contentType="text/html; charset=UTF-8" language="java" %>
 <%@ page import="java.util.List" %>
 <%@ page import="Controller.Bean.Piatto" %>
+<%@ page import="Controller.Bean.Utente" %>
 
 <%
     List<Piatto> lista = (List<Piatto>) request.getAttribute("listaPiatti");
     String contextPath = request.getContextPath();
+
+    Utente utenteLoggato = (Utente) session.getAttribute("utenteLoggato");
+    String ruolo = (String) session.getAttribute("ruolo");
+    boolean isCliente = (utenteLoggato != null && "CLIENTE".equalsIgnoreCase(ruolo));
 %>
 
 <!DOCTYPE html>
@@ -31,7 +36,6 @@
         .bevande-link:hover {
             text-shadow: 0 0 6px #f2b66d;
         }
-
 
         html, body {
             margin: 0;
@@ -86,8 +90,8 @@
             right: 0;
             z-index: 50;
 
-            height: 80px;              /* <<< altezza fissa */
-            padding: 0 36px;           /* padding solo laterale */
+            height: 80px;
+            padding: 0 36px;
 
             background: rgba(15, 23, 42, 0.92);
             backdrop-filter: blur(14px);
@@ -97,14 +101,12 @@
             justify-content: space-between;
         }
 
-
         header .logo-title {
             display: flex;
             align-items: center;
             gap: 10px;
         }
 
-        /* qui in futuro metterai il tuo logo al posto del cerchio */
         .logo-circle {
             width: 34px;
             height: 34px;
@@ -169,10 +171,9 @@
         .page {
             max-width: 1100px;
             margin: 0 auto 40px;
-            padding: 110px 22px 30px;   /* <<< 80px header + 30px margine */
+            padding: 110px 22px 30px;   /* 80px header + 30px margine */
             color: #f9fafb;
         }
-
 
         .empty-message {
             margin-top: 40px;
@@ -368,7 +369,7 @@
             }
 
             .page {
-                padding: 0 14px 24px;
+                padding: 110px 14px 24px;
             }
         }
     </style>
@@ -389,7 +390,11 @@
         </div>
 
         <div class="header-right">
-            <a href="<%= contextPath %>/home" class="btn">Torna alla home</a>
+            <% if (isCliente) { %>
+                <a href="clienteHome.jsp" class="btn">Torna all'area riservata</a>
+            <% } else { %>
+                <a href="<%= contextPath %>/home" class="btn">Torna alla home</a>
+            <% } %>
         </div>
     </header>
 
@@ -413,8 +418,7 @@
             <button class="tab-btn" data-target="secondo">Secondi</button>
             <button class="tab-btn" data-target="contorno">Contorni</button>
             <button class="tab-btn" data-target="dolce">Dolci</button>
-             <a href="<%= contextPath %>/bevande" class="tab-btn bevande-link">Bevande</a>
-
+            <a href="<%= contextPath %>/bevande" class="tab-btn bevande-link">Bevande</a>
         </div>
 
         <%
@@ -479,7 +483,7 @@
                             <%= p.getDescrizione() != null ? p.getDescrizione() : "" %>
                         </div>
                         <div class="card-footer">
-                            <span class="card-tag">GugaRistoo · Chef’s choice</span>
+                            <span class="card-tag">GugaRistò · Chef’s choice</span>
                         </div>
                     </div>
                 </div>
@@ -500,7 +504,7 @@
 <!-- JS per i tab -->
 <script>
     document.addEventListener("DOMContentLoaded", function () {
-        const tabs = document.querySelectorAll(".tab-btn");
+        const tabs = document.querySelectorAll(".tab-btn[data-target]");
         const sections = document.querySelectorAll(".category-section");
 
         function showCategory(cat) {
@@ -527,7 +531,9 @@
         tabs.forEach(btn => {
             btn.addEventListener("click", function () {
                 const target = this.getAttribute("data-target");
-                showCategory(target);
+                if (target) {
+                    showCategory(target);
+                }
             });
         });
     });
@@ -535,6 +541,3 @@
 
 </body>
 </html>
-
-
-

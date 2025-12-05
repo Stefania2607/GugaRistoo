@@ -1,34 +1,45 @@
 package Controller.Grafico;
 
-import DAO.PiattoDAO;
+import Controller.Applicativo.MenuApplicativo;
 import Controller.Bean.Piatto;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.*;
 import java.io.IOException;
 import java.util.List;
 
 @WebServlet("/menu")
 public class MenuController extends HttpServlet {
 
+    private MenuApplicativo menuApplicativo;
+
+    @Override
+    public void init() throws ServletException {
+        super.init();
+        menuApplicativo = new MenuApplicativo();
+    }
+
     @Override
     protected void doGet(HttpServletRequest request,
                          HttpServletResponse response)
             throws ServletException, IOException {
 
-        // 1) Prendo i piatti dal DAO
-        PiattoDAO dao = new PiattoDAO();
-        List<Piatto> piatti = dao.findAll();
+        // es. parametro ?categoria=primi
+        String categoria = request.getParameter("categoria");
 
-        // 2) Li metto nella request
-        request.setAttribute("listaPiatti", piatti);
+        List<Piatto> lista;
 
-        // 3) Giro la palla alla JSP
-        RequestDispatcher rd = request.getRequestDispatcher("menu.jsp");
-        rd.forward(request, response);
+        if (categoria == null || categoria.isBlank()) {
+            lista = menuApplicativo.getMenuCompleto();
+        } else {
+            lista = menuApplicativo.getMenuPerCategoria(categoria);
+        }
+
+        request.setAttribute("listaPiatti", lista);
+
+        // parte grafica: decido quale JSP mostrare
+        request.getRequestDispatcher("menu.jsp").forward(request, response);
     }
 }
+

@@ -1,28 +1,88 @@
 package Controller.Grafico;
 
-import javax.servlet.RequestDispatcher;
+import Controller.Applicativo.LoginApplicativo;
+import Controller.Bean.Utente;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import javax.servlet.http.*;
 import java.io.IOException;
+
 @WebServlet("/login")
 public class LoginController extends HttpServlet {
+
+    private LoginApplicativo loginApplicativo;
+
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+    public void init() throws ServletException {
+        super.init();
+        loginApplicativo = new LoginApplicativo();  // usa applicativo
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest request,
+                          HttpServletResponse response)
             throws ServletException, IOException {
 
-        String nome = request.getParameter("nome");
-        String codice = request.getParameter("codice");
+        String username = request.getParameter("username");
+        String password = request.getParameter("password");
 
-        System.out.println("Nome inserito: " + nome);
-        System.out.println("Codice inserito: " + codice);
+        // Delego al controller applicativo
+        Utente u = loginApplicativo.autentica(username, password);
 
-        RequestDispatcher dispatcher =
-                request.getRequestDispatcher("/home.jsp");
-        dispatcher.forward(request, response);
+        if (u == null) {
+            request.setAttribute("erroreLogin", "Username o password non validi");
+            request.getRequestDispatcher("login.jsp").forward(request, response);
+            return;
+        }
+
+        // Parte grafica: gestione sessione, navigazione
+        HttpSession session = request.getSession();
+        session.setAttribute("utenteLoggato", u);
+        session.setAttribute("ruolo", u.getRuolo());
+
+        switch (u.getRuolo()) {
+            case "ADMIN":
+                response.sendRedirect("adminHome.jsp");
+                break;
+            case "CAMERIERE":
+                response.sendRedirect("cameriereHome.jsp");
+                break;
+            case "CLIENTE":
+            default:
+                response.sendRedirect("clienteHome.jsp");
+                break;
+        }
     }
-}
 
+    @Override
+    protected void doGet(HttpServletRequest request,
+                         HttpServletResponse response)
+            throws ServletException, IOException {
+
+        HttpSession session = request.getSession(false);
+        Utente u = (session != null) ? (Utente) session.getAttribute("utenteLoggato") : null;
+
+        // Se l'utente è già autenticato, NON ha senso far vedere di nuovo il form di login
+        if (u != null) {
+            String ruolo = u.getRuolo();
+
+            switch (ruolo) {
+                case "ADMIN":
+                    response.sendRedirect("adminHome.jsp");
+                    return;
+                case "CAMERIERE":
+                    response.sendRedirect("cameriereHome.jsp");
+                    return;
+                case "CLIENTE":
+                default:
+                    response.sendRedirect("clienteHome.jsp");
+                    return;
+            }
+        }
+
+        // Utente non autenticato → mostro la pagina di login
+        request.getRequestDispatcher("login.jsp").forward(request, response);
+    }
+
+}
