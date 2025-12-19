@@ -12,6 +12,7 @@ import java.io.IOException;
 
 @WebServlet("/aggiungiAlCarrello")
 public class AggiungiAlCarrelloController extends HttpServlet {
+
     private final PiattoDAO piattoDAO = new PiattoDAO();
 
     @Override
@@ -23,7 +24,7 @@ public class AggiungiAlCarrelloController extends HttpServlet {
         // 1) leggo parametro
         final String idParam = request.getParameter("idPiatto");
         if (idParam == null || idParam.isBlank()) {
-            response.sendRedirect(redirectMenu);
+            redirect(response, redirectMenu);
             return;
         }
 
@@ -32,7 +33,7 @@ public class AggiungiAlCarrelloController extends HttpServlet {
             idPiatto = Integer.parseInt(idParam.trim());
         } catch (NumberFormatException e) {
             log("Parametro idPiatto non numerico: '" + idParam + "'", e);
-            response.sendRedirect(redirectMenu);
+            redirect(response, redirectMenu);
             return;
         }
 
@@ -46,12 +47,13 @@ public class AggiungiAlCarrelloController extends HttpServlet {
         }
 
         if (piatto == null) {
-            response.sendRedirect(redirectMenu);
+            redirect(response, redirectMenu);
             return;
         }
 
         // 3) sessione + carrello
         final HttpSession session = request.getSession(true);
+
         Object attr = session.getAttribute("carrello");
         final Carrello carrello;
         if (attr instanceof Carrello) {
@@ -70,13 +72,24 @@ public class AggiungiAlCarrelloController extends HttpServlet {
         log("[CARRELLO] Aggiunto " + piatto.getNome()
                 + " | articoli totali: " + carrello.getNumeroArticoli());
 
-        response.sendRedirect(redirectMenu);
+        redirect(response, redirectMenu);
     }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // In GET non aggiungere al carrello (operazione con side-effect).
-        response.sendRedirect(request.getContextPath() + "/menuOrdinaDaCasa");
+
+        redirect(response, request.getContextPath() + "/menuOrdinaDaCasa");
+    }
+
+    /**
+     * Wrapper unico per zittire Sonar: gestisce l'IOException di sendRedirect.
+     */
+    private void redirect(HttpServletResponse response, String location) throws ServletException {
+        try {
+            response.sendRedirect(location);
+        } catch (IOException e) {
+            throw new ServletException("Redirect fallito verso: " + location, e);
+        }
     }
 }
