@@ -30,12 +30,12 @@ public class AnnullaOrdineSmartController extends HttpServlet {
         if (u == null) {
             try {
                 response.sendRedirect(request.getContextPath() + "/login");
+                return;
             } catch (IOException e) {
-                // qui NON fai printStackTrace
                 throw new ServletException("Redirect verso /login fallito", e);
             }
-            return;
         }
+
 
 
         // attributi sessione (potrebbero non esserci)
