@@ -1,8 +1,8 @@
 package controller.applicativo;
 
-import controller.Bean.Ordine;
-import controller.Exception.DAOException;
-import DAO.OrdineDAO;
+import controller.bean.Ordine;
+import controller.exception.DAOException;
+import dao.OrdineDAO;
 
 import java.util.List;
 

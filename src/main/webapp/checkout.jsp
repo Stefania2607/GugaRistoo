@@ -1,6 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ page import="Controller.Bean.Carrello" %>
-<%@ page import="Controller.Bean.RigaCarrello" %>
+<%@ page import="controller.bean.Carrello" %>
+<%@ page import="controller.bean.RigaCarrello" %>
 <%@ page import="java.math.BigDecimal" %>
 
 <%

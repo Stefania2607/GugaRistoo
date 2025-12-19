@@ -1,7 +1,7 @@
 package controller.applicativo;
 
-import controller.Bean.Utente;
-import controller.Exception.DAOException;
+import controller.bean.Utente;
+import controller.exception.DAOException;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -38,12 +38,8 @@ public class AnnullaOrdineSmartController extends HttpServlet {
 
         // ATTENZIONE:
         // devi aver messo questi attributi in sessione quando hai creato ordine/prenotazione
-        Integer prenId = (session != null)
-                ? (Integer) session.getAttribute("prenotazioneCorrenteId")
-                : null;
-        Integer ordineId = (session != null)
-                ? (Integer) session.getAttribute("ordineCorrenteId")
-                : null;
+        Integer prenId = (Integer) session.getAttribute("prenotazioneCorrenteId");
+        Integer ordineId = (Integer) session.getAttribute("ordineCorrenteId");
 
         if (ordineId != null) {
             // Caso "pulito": abbiamo l'idOrdine → annullo ordine + prenotazione collegata
@@ -72,12 +68,10 @@ public class AnnullaOrdineSmartController extends HttpServlet {
         }
 
         // Pulizia contesto dalla sessione
-        if (session != null) {
-            session.removeAttribute("prenotazioneCorrenteId");
-            session.removeAttribute("tavoloCorrenteId");
-            session.removeAttribute("modalitaServizio");
-            session.removeAttribute("ordineCorrenteId"); // se esiste
-        }
+        session.removeAttribute("prenotazioneCorrenteId");
+        session.removeAttribute("tavoloCorrenteId");
+        session.removeAttribute("modalitaServizio");
+        session.removeAttribute("ordineCorrenteId"); // se esiste
 
         response.sendRedirect(request.getContextPath() + "/ordinaSmart");
     }

@@ -1,7 +1,7 @@
 package controller.applicativo;
 
-import controller.Bean.Utente;
-import DAO.UtenteDAO;
+import controller.bean.Utente;
+import dao.UtenteDAO;
 
 public class LoginApplicativo {
 

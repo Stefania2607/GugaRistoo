@@ -1,10 +1,10 @@
 package controller.applicativo;
 
-import controller.Bean.Utente;
-import controller.Bean.Prenotazione;
-import controller.Exception.PrenotazioneException;
-import DAO.PrenotazioneDAO;
-import DAO.TavoloDAO;
+import controller.bean.Utente;
+import controller.bean.Prenotazione;
+import controller.exception.PrenotazioneException;
+import dao.PrenotazioneDAO;
+import dao.TavoloDAO;
 
 import java.sql.SQLException;
 import java.util.List;

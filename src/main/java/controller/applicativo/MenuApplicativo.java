@@ -1,8 +1,8 @@
 package controller.applicativo;
 
-import controller.Bean.Piatto;
-import controller.Exception.DAOException;
-import DAO.PiattoDAO;
+import controller.bean.Piatto;
+import controller.exception.DAOException;
+import dao.PiattoDAO;
 
 import java.util.List;
 

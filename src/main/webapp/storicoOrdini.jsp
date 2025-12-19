@@ -1,6 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="java.util.List" %>
-<%@ page import="Controller.Bean.Ordine" %>
+<%@ page import="controller.bean.Ordine" %>
 
 <%
     List<Ordine> lista = (List<Ordine>) request.getAttribute("listaOrdini");

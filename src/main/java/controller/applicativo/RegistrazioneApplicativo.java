@@ -1,8 +1,8 @@
 package controller.applicativo;
 
-import controller.Bean.Utente;
-import controller.Exception.RegistrazioneException;
-import DAO.UtenteDAO;
+import controller.bean.Utente;
+import controller.exception.RegistrazioneException;
+import dao.UtenteDAO;
 
 import java.sql.SQLException;
 

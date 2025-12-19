@@ -1,6 +1,6 @@
 <%@ page contentType="text/html; charset=UTF-8" language="java" %>
 <%@ page import="java.util.List" %>
-<%@ page import="Controller.Bean.Prenotazione" %>
+<%@ page import="controller.bean.Prenotazione" %>
 
 <!DOCTYPE html>
 <html lang="it">

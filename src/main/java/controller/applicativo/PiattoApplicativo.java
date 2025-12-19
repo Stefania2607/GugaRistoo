@@ -1,10 +1,10 @@
 // src/main/java/Controller/Applicativo/PiattoApplicativo.java
 package controller.applicativo;
 
-import controller.Bean.Piatto;
-import controller.Exception.DAOException;
-import controller.Exception.DatiNonValidiException;
-import DAO.PiattoDAO;
+import controller.bean.Piatto;
+import controller.exception.DAOException;
+import controller.exception.DatiNonValidiException;
+import dao.PiattoDAO;
 
 import java.math.BigDecimal;
 

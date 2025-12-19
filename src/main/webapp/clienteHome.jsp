@@ -1,5 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ page import="Controller.Bean.Utente" %>
+<%@ page import="controller.bean.Utente" %>
 <%
     Utente u = (Utente) session.getAttribute("utenteLoggato");
     String ruolo = (String) session.getAttribute("ruolo");

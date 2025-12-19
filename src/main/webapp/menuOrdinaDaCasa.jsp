@@ -1,7 +1,7 @@
 <%@ page contentType="text/html; charset=UTF-8" language="java" %>
 <%@ page import="java.util.List" %>
-<%@ page import="Controller.Bean.Piatto" %>
-<%@ page import="Controller.Bean.Carrello" %>
+<%@ page import="controller.bean.Piatto" %>
+<%@ page import="controller.bean.Carrello" %>
 
 <%
     List<Piatto> listaPiatti = (List<Piatto>) request.getAttribute("listaPiatti");
