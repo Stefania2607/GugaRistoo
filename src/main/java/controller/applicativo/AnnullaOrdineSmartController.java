@@ -27,18 +27,13 @@ public class AnnullaOrdineSmartController extends HttpServlet {
         final HttpSession session = request.getSession(false);
         final Utente u = (session != null) ? getUtenteLoggato(session) : null;
 
+        // 1) Non loggato: redirect, fine. NIENTE try/catch.
         if (u == null) {
-            try {
-                response.sendRedirect(request.getContextPath() + "/login");
-                return;
-            } catch (IOException e) {
-                throw new ServletException("Redirect verso /login fallito", e);
-            }
+            response.sendRedirect(request.getContextPath() + "/login");
+            return;
         }
 
-
-
-        // attributi sessione (potrebbero non esserci)
+        // 2) Leggo contesto dalla sessione
         final Integer prenId = getIntegerAttr(session, "prenotazioneCorrenteId");
         final Integer ordineId = getIntegerAttr(session, "ordineCorrenteId");
 
@@ -59,16 +54,26 @@ public class AnnullaOrdineSmartController extends HttpServlet {
             }
 
         } catch (DAOException e) {
-            log("Errore DAO durante annullaOrdineSmart. ordineId=" + ordineId
+            // 3) Qui l'eccezione la gestisci TU: log + messaggio utente
+            log("Errore DAO durante annullaOrdineSmart: ordineId=" + ordineId
                     + ", prenId=" + prenId + ", userId=" + u.getId(), e);
 
             session.setAttribute("notificaPrenotazione",
                     "Errore durante l'annullamento. Riprova.");
+
         } finally {
-            // Pulizia contesto dalla sessione
+            // 4) Pulizia contesto: sempre, anche se errore
             pulisciContestoOrdinaSmart(session);
         }
 
+        // 5) Redirect finale
+        response.sendRedirect(request.getContextPath() + "/ordinaSmart");
+    }
+
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        // Se vuoi permettere solo POST, qui fai redirect o 405.
         response.sendRedirect(request.getContextPath() + "/ordinaSmart");
     }
 
