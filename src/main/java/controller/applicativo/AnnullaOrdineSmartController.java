@@ -27,13 +27,13 @@ public class AnnullaOrdineSmartController extends HttpServlet {
         final HttpSession session = request.getSession(false);
         final Utente u = (session != null) ? getUtenteLoggato(session) : null;
 
-        // 1) Non loggato: redirect, fine. NIENTE try/catch.
+        // Non loggato: redirect senza try/catch (doPost già throws IOException)
         if (u == null) {
             response.sendRedirect(request.getContextPath() + "/login");
             return;
         }
 
-        // 2) Leggo contesto dalla sessione
+        // attributi sessione (potrebbero non esserci)
         final Integer prenId = getIntegerAttr(session, "prenotazioneCorrenteId");
         final Integer ordineId = getIntegerAttr(session, "ordineCorrenteId");
 
@@ -54,26 +54,17 @@ public class AnnullaOrdineSmartController extends HttpServlet {
             }
 
         } catch (DAOException e) {
-            // 3) Qui l'eccezione la gestisci TU: log + messaggio utente
-            log("Errore DAO durante annullaOrdineSmart: ordineId=" + ordineId
+            // Questa eccezione la gestisci TU (come hai chiesto): log + messaggio utente
+            log("Errore DAO durante annullaOrdineSmart. ordineId=" + ordineId
                     + ", prenId=" + prenId + ", userId=" + u.getId(), e);
 
             session.setAttribute("notificaPrenotazione",
                     "Errore durante l'annullamento. Riprova.");
 
         } finally {
-            // 4) Pulizia contesto: sempre, anche se errore
             pulisciContestoOrdinaSmart(session);
         }
 
-        // 5) Redirect finale
-        response.sendRedirect(request.getContextPath() + "/ordinaSmart");
-    }
-
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        // Se vuoi permettere solo POST, qui fai redirect o 405.
         response.sendRedirect(request.getContextPath() + "/ordinaSmart");
     }
 
