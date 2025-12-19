@@ -12,26 +12,48 @@ import java.io.IOException;
 public class CarrelloController extends HttpServlet {
 
     @Override
-    protected void doGet(HttpServletRequest request,
-                         HttpServletResponse response)
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        HttpSession session = request.getSession(false);
-        Utente u = (session != null) ? (Utente) session.getAttribute("utenteLoggato") : null;
+        final HttpSession session = request.getSession(false);
 
+        // 1) controllo login in modo robusto (niente cast ciechi)
+        final Utente u = getUtenteLoggato(session);
         if (u == null) {
             response.sendRedirect(request.getContextPath() + "/login");
             return;
         }
 
-        Carrello carrello = (session != null)
-                ? (Carrello) session.getAttribute("carrello")
-                : null;
+        // 2) recupero carrello in modo robusto
+        final Carrello carrello = getCarrello(session);
 
-        // se non esiste ancora, lo tratto come vuoto
+        // 3) se non esiste, lo tratto come vuoto (puoi anche istanziarlo qui se vuoi)
         request.setAttribute("carrello", carrello);
 
-        request.getRequestDispatcher("carrello.jsp").forward(request, response);
+        // 4) forward a JSP (path chiaro)
+        request.getRequestDispatcher("/carrello.jsp").forward(request, response);
     }
 
+    private Utente getUtenteLoggato(HttpSession session) {
+        if (session == null) return null;
+        Object attr = session.getAttribute("utenteLoggato");
+        if (attr instanceof Utente) return (Utente) attr;
+
+        // se trovi un tipo errato, non esplodere: tratta come non loggato
+        if (attr != null) {
+            log("Attributo 'utenteLoggato' in sessione di tipo inatteso: " + attr.getClass().getName());
+        }
+        return null;
+    }
+
+    private Carrello getCarrello(HttpSession session) {
+        if (session == null) return null;
+        Object attr = session.getAttribute("carrello");
+        if (attr instanceof Carrello) return (Carrello) attr;
+
+        if (attr != null) {
+            log("Attributo 'carrello' in sessione di tipo inatteso: " + attr.getClass().getName());
+        }
+        return null;
+    }
 }

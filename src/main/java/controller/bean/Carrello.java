@@ -1,36 +1,64 @@
 package controller.bean;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class Carrello {
+public class Carrello implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = 1L;
 
     // idPiatto → RigaCarrello
-    private Map<Integer, RigaCarrello> righe = new LinkedHashMap<>();
-
+    private final Map<Integer, RigaCarrello> righe = new LinkedHashMap<>();
     public Map<Integer, RigaCarrello> getRighe() {
-        return righe;
+        return Collections.unmodifiableMap(righe);
     }
 
     public void aggiungiPiatto(Piatto p) {
-        int id = p.getId();
+        if (p == null) return; // difesa minima: evita NPE
 
+        int id = p.getId();
         RigaCarrello r = righe.get(id);
+
         if (r == null) {
-            r = new RigaCarrello(p, 1);
-            righe.put(id, r);
+            righe.put(id, new RigaCarrello(p, 1));
         } else {
             r.incrementa();
         }
     }
 
     public void rimuoviPiatto(Piatto p) {
+        if (p == null) return;
+
         int id = p.getId();
         RigaCarrello r = righe.get(id);
+
         if (r != null) {
             r.decrementa();
-            if (r.getQuantita() <= 0) righe.remove(id);
+            if (r.getQuantita() <= 0) {
+                righe.remove(id);
+            }
+        }
+    }
+
+    public void incrementaPiatto(int idPiatto) {
+        RigaCarrello r = righe.get(idPiatto);
+        if (r != null) {
+            r.incrementa();
+        }
+    }
+
+    public void decrementaPiatto(int idPiatto) {
+        RigaCarrello r = righe.get(idPiatto);
+        if (r != null) {
+            r.decrementa();
+            if (r.getQuantita() <= 0) {
+                righe.remove(idPiatto);
+            }
         }
     }
 
@@ -53,25 +81,9 @@ public class Carrello {
         }
         return totale;
     }
-    public void incrementaPiatto(int idPiatto) {
-        RigaCarrello r = righe.get(idPiatto);
-        if (r != null) {
-            r.incrementa();
-        }
-    }
-
-    public void decrementaPiatto(int idPiatto) {
-        RigaCarrello r = righe.get(idPiatto);
-        if (r != null) {
-            r.decrementa();
-            if (r.getQuantita() <= 0) {
-                righe.remove(idPiatto);  // se arriva a 0, elimino la riga dal carrello
-            }
-        }
-    }
 
     public boolean isVuoto() {
-        return righe == null || righe.isEmpty();
+        // righe non è mai null (è final e inizializzata), quindi basta questo:
+        return righe.isEmpty();
     }
-
 }
