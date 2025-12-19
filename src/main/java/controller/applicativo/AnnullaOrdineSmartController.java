@@ -35,12 +35,19 @@ public class AnnullaOrdineSmartController extends HttpServlet {
             } catch (IOException e) {
                 log("Redirect verso /login fallito in AnnullaOrdineSmartController", e);
 
-                // risposta controllata: non mostrare dettagli
+                // risposta controllata: non mostrare dettagli (ma anche sendError può lanciare IOException)
                 if (!response.isCommitted()) {
-                    response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                    try {
+                        response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                    } catch (IOException e2) {
+                        // ultimo livello: qui NON chiamare altri metodi che lanciano checked exception
+                        log("Impossibile inviare anche l'errore 500 (response già in stato problematico)", e2);
+                    }
                 }
+
                 return;
             }
+
         }
 
 
