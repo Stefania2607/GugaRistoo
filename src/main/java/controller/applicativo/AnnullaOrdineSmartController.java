@@ -16,63 +16,70 @@ public class AnnullaOrdineSmartController extends HttpServlet {
 
     @Override
     public void init() throws ServletException {
-        super.init();
         ordineApplicativo = new OrdineApplicativo();
         prenotazioneApplicativo = new PrenotazioneApplicativo();
     }
 
     @Override
-    protected void doPost(HttpServletRequest request,
-                          HttpServletResponse response)
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        HttpSession session = request.getSession(false);
-        Utente u = (session != null)
-                ? (Utente) session.getAttribute("utenteLoggato")
-                : null;
+        final HttpSession session = request.getSession(false);
+        final Utente u = (session != null) ? getUtenteLoggato(session) : null;
 
         if (u == null) {
             response.sendRedirect(request.getContextPath() + "/login");
             return;
         }
 
-        // ATTENZIONE:
-        // devi aver messo questi attributi in sessione quando hai creato ordine/prenotazione
-        Integer prenId = (Integer) session.getAttribute("prenotazioneCorrenteId");
-        Integer ordineId = (Integer) session.getAttribute("ordineCorrenteId");
+        // attributi sessione (potrebbero non esserci)
+        final Integer prenId = getIntegerAttr(session, "prenotazioneCorrenteId");
+        final Integer ordineId = getIntegerAttr(session, "ordineCorrenteId");
 
-        if (ordineId != null) {
-            // Caso "pulito": abbiamo l'idOrdine → annullo ordine + prenotazione collegata
-            try {
+        try {
+            if (ordineId != null) {
                 ordineApplicativo.annullaOrdineEprenotazione(ordineId, u.getId());
-
                 session.setAttribute("notificaPrenotazione",
                         "Ordine annullato, prenotazione cancellata e tavolo liberato.");
 
-            } catch (DAOException e) {
-                e.printStackTrace();
+            } else if (prenId != null) {
+                prenotazioneApplicativo.annullaPrenotazione(prenId, u.getId());
                 session.setAttribute("notificaPrenotazione",
-                        "Errore durante l'annullamento dell'ordine.");
+                        "Prenotazione annullata e tavolo liberato.");
+
+            } else {
+                session.setAttribute("notificaPrenotazione",
+                        "Nessun ordine/prenotazione attiva da annullare.");
             }
 
-        } else if (prenId != null) {
-            // Fallback: abbiamo solo l'idPrenotazione → annullo solo la prenotazione
-            prenotazioneApplicativo.annullaPrenotazione(prenId, u.getId());
+        } catch (DAOException e) {
+            log("Errore DAO durante annullaOrdineSmart. ordineId=" + ordineId
+                    + ", prenId=" + prenId + ", userId=" + u.getId(), e);
 
             session.setAttribute("notificaPrenotazione",
-                    "Prenotazione annullata e tavolo liberato.");
-
-        } else {
-            session.setAttribute("notificaPrenotazione",
-                    "Nessun ordine/prenotazione attiva da annullare.");
+                    "Errore durante l'annullamento. Riprova.");
+        } finally {
+            // Pulizia contesto dalla sessione
+            pulisciContestoOrdinaSmart(session);
         }
 
-        // Pulizia contesto dalla sessione
+        response.sendRedirect(request.getContextPath() + "/ordinaSmart");
+    }
+
+    private Utente getUtenteLoggato(HttpSession session) {
+        Object attr = session.getAttribute("utenteLoggato");
+        return (attr instanceof Utente) ? (Utente) attr : null;
+    }
+
+    private Integer getIntegerAttr(HttpSession session, String name) {
+        Object attr = session.getAttribute(name);
+        return (attr instanceof Integer) ? (Integer) attr : null;
+    }
+
+    private void pulisciContestoOrdinaSmart(HttpSession session) {
         session.removeAttribute("prenotazioneCorrenteId");
         session.removeAttribute("tavoloCorrenteId");
         session.removeAttribute("modalitaServizio");
-        session.removeAttribute("ordineCorrenteId"); // se esiste
-
-        response.sendRedirect(request.getContextPath() + "/ordinaSmart");
+        session.removeAttribute("ordineCorrenteId");
     }
 }
