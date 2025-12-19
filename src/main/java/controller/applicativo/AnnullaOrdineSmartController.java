@@ -28,9 +28,15 @@ public class AnnullaOrdineSmartController extends HttpServlet {
         final Utente u = (session != null) ? getUtenteLoggato(session) : null;
 
         if (u == null) {
-            response.sendRedirect(request.getContextPath() + "/login");
+            try {
+                response.sendRedirect(request.getContextPath() + "/login");
+            } catch (IOException e) {
+                // qui NON fai printStackTrace
+                throw new ServletException("Redirect verso /login fallito", e);
+            }
             return;
         }
+
 
         // attributi sessione (potrebbero non esserci)
         final Integer prenId = getIntegerAttr(session, "prenotazioneCorrenteId");
