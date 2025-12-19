@@ -2,6 +2,7 @@ package controller.applicativo;
 
 import controller.bean.Utente;
 import controller.exception.DAOException;
+import controller.exception.AnnullaOrdineSmartException;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -27,13 +28,12 @@ public class AnnullaOrdineSmartController extends HttpServlet {
         final HttpSession session = request.getSession(false);
         final Utente u = (session != null) ? getUtenteLoggato(session) : null;
 
-        // Non loggato: redirect senza try/catch (doPost già throws IOException)
         if (u == null) {
+            // niente try/catch inutile: doPost già throws IOException
             response.sendRedirect(request.getContextPath() + "/login");
             return;
         }
 
-        // attributi sessione (potrebbero non esserci)
         final Integer prenId = getIntegerAttr(session, "prenotazioneCorrenteId");
         final Integer ordineId = getIntegerAttr(session, "ordineCorrenteId");
 
@@ -54,12 +54,15 @@ public class AnnullaOrdineSmartController extends HttpServlet {
             }
 
         } catch (DAOException e) {
-            // Questa eccezione la gestisci TU (come hai chiesto): log + messaggio utente
+            // Log + messaggio utente (gestione tua)
             log("Errore DAO durante annullaOrdineSmart. ordineId=" + ordineId
                     + ", prenId=" + prenId + ", userId=" + u.getId(), e);
 
             session.setAttribute("notificaPrenotazione",
                     "Errore durante l'annullamento. Riprova.");
+
+            // E in più: eccezione specifica “di questa classe”
+            throw new AnnullaOrdineSmartException("Errore durante annullaOrdineSmart", e);
 
         } finally {
             pulisciContestoOrdinaSmart(session);
