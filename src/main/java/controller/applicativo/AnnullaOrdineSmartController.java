@@ -62,7 +62,11 @@ public class AnnullaOrdineSmartController extends HttpServlet {
                     "Errore durante l'annullamento. Riprova.");
 
             // E in più: eccezione specifica “di questa classe”
-            throw new AnnullaOrdineSmartException("Errore durante annullaOrdineSmart", e);
+            try {
+                throw new AnnullaOrdineSmartException("Errore durante annullaOrdineSmart", e);
+            } catch (AnnullaOrdineSmartException ex) {
+                throw new RuntimeException(ex);
+            }
 
         } finally {
             pulisciContestoOrdinaSmart(session);
