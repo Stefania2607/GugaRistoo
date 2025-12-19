@@ -29,10 +29,20 @@ public class AnnullaOrdineSmartController extends HttpServlet {
         final Utente u = (session != null) ? getUtenteLoggato(session) : null;
 
         if (u == null) {
-            // niente try/catch inutile: doPost già throws IOException
-            response.sendRedirect(request.getContextPath() + "/login");
-            return;
+            try {
+                response.sendRedirect(request.getContextPath() + "/login");
+                return;
+            } catch (IOException e) {
+                log("Redirect verso /login fallito in AnnullaOrdineSmartController", e);
+
+                // risposta controllata: non mostrare dettagli
+                if (!response.isCommitted()) {
+                    response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                }
+                return;
+            }
         }
+
 
         final Integer prenId = getIntegerAttr(session, "prenotazioneCorrenteId");
         final Integer ordineId = getIntegerAttr(session, "ordineCorrenteId");
