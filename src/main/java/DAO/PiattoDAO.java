@@ -1,8 +1,8 @@
 package DAO;
 
-import Controller.Bean.Piatto;
+import controller.Bean.Piatto;
+import controller.Exception.DAOException;
 
-import java.math.BigDecimal;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,74 +11,47 @@ public class PiattoDAO {
 
     /**
      * Ottiene una connessione al DB usando la tua ConnectionFactory.
-     * Qui NON usiamo JNDI / DataSource di Tomcat: tutto passa da ConnectionFactory.
+     * Tutto passa da ConnectionFactory (no JNDI / DataSource Tomcat).
      */
     private Connection getConnection() throws SQLException {
         return ConnectionFactory.getConnection();
     }
-    public List<Piatto> findVini(String sotto) {
+
+    // ------------------------------------------------------------------------
+    //  METODI DI LETTURA
+    // ------------------------------------------------------------------------
+
+    public List<Piatto> findVini(String sotto) throws DAOException {
         List<Piatto> lista = new ArrayList<>();
 
         String baseSql =
                 "SELECT id, nome, descrizione, categoria, tipo_bevanda, prezzo, immagine_url " +
                         "FROM piatto WHERE categoria = 'bevanda' ";
 
-        String sql;
+        if (sotto == null) sotto = "tutti";
 
-        if (sotto == null) {
-            sotto = "tutti";
-        }
-
-        switch (sotto) {
-            case "rossi":
-                sql = baseSql + "AND tipo_bevanda = 'vini_rossi'";
-                break;
-            case "bianchi":
-                sql = baseSql + "AND tipo_bevanda = 'vini_bianchi'";
-                break;
-            case "rose":
-                sql = baseSql + "AND tipo_bevanda = 'vini_rose'";
-                break;
-            case "bollicine":
-                sql = baseSql + "AND tipo_bevanda = 'vini_bollicine'";
-                break;
-            case "tutti":
-            default:
-                sql = baseSql + "AND tipo_bevanda LIKE 'vini_%'";
-                break;
-        }
+        String sql = switch (sotto) {
+            case "rossi" -> baseSql + "AND tipo_bevanda = 'vini_rossi'";
+            case "bianchi" -> baseSql + "AND tipo_bevanda = 'vini_bianchi'";
+            case "rose" -> baseSql + "AND tipo_bevanda = 'vini_rose'";
+            case "bollicine" -> baseSql + "AND tipo_bevanda = 'vini_bollicine'";
+            default -> baseSql + "AND tipo_bevanda LIKE 'vini_%'";
+        };
 
         try (Connection con = getConnection();
              PreparedStatement ps = con.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
 
             while (rs.next()) {
-                Piatto p = new Piatto();
-                p.setId(rs.getInt("id"));
-                p.setNome(rs.getString("nome"));
-                p.setDescrizione(rs.getString("descrizione"));
-                p.setCategoria(rs.getString("categoria"));
-                p.setTipoBevanda(rs.getString("tipo_bevanda"));
-                p.setPrezzo(rs.getBigDecimal("prezzo"));
-                p.setImmagineUrl(rs.getString("immagine_url"));
-                lista.add(p);
+                lista.add(mapRow(rs));
             }
+            return lista;
 
         } catch (SQLException e) {
-            throw new RuntimeException("Errore in findVini(" + sotto + ")", e);
+            throw new DAOException("Errore DB in PiattoDAO.findVini(sotto=" + sotto + ")", e);
         }
-
-        return lista;
     }
-    // ------------------------------------------------------------------------
-    //  METODI DI LETTURA
-    // ------------------------------------------------------------------------
-
-    /**
-     * Restituisce tutti i piatti di una certa categoria
-     * (es. "antipasto", "primo", "secondo", "dolce", "bevanda"...).
-     */
-    public List<Piatto> findByCategoria(String categoria) {
+    public List<Piatto> findByCategoria(String categoria) throws DAOException {
         List<Piatto> lista = new ArrayList<>();
 
         String sql =
@@ -93,37 +66,21 @@ public class PiattoDAO {
 
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
-                    Piatto p = new Piatto();
-                    p.setId(rs.getInt("id"));
-                    p.setNome(rs.getString("nome"));
-                    p.setDescrizione(rs.getString("descrizione"));
-                    p.setCategoria(rs.getString("categoria"));
-                    p.setTipoBevanda(rs.getString("tipo_bevanda"));   // per piatti non-bevanda sarà NULL
-                    p.setPrezzo(rs.getBigDecimal("prezzo"));
-                    p.setImmagineUrl(rs.getString("immagine_url"));
-                    lista.add(p);
+                    lista.add(mapRow(rs));
                 }
             }
+            return lista;
 
         } catch (SQLException e) {
-            throw new RuntimeException("Errore in findByCategoria(" + categoria + ")", e);
+            throw new DAOException("Errore DB in PiattoDAO.findByCategoria(categoria=" + categoria + ")", e);
         }
-
-        return lista;
     }
 
-    /**
-     * Comodità per ottenere tutte le bevande (categoria = 'bevanda').
-     */
-    public List<Piatto> findBevande() {
+    /** Comodità per ottenere tutte le bevande (categoria = 'bevanda'). */
+    public List<Piatto> findBevande() throws DAOException {
         return findByCategoria("bevanda");
     }
-
-    /**
-     * Restituisce solo le bevande di un certo tipo specifico
-     * (es. tipoBevanda = "vini", "birre", "alcolici", "analcolici", "acqua", "altre").
-     */
-    public List<Piatto> findBevandeByTipo(String tipoBevanda) {
+    public List<Piatto> findBevandeByTipo(String tipoBevanda) throws DAOException {
         List<Piatto> lista = new ArrayList<>();
 
         String sql =
@@ -138,29 +95,18 @@ public class PiattoDAO {
 
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
-                    Piatto p = new Piatto();
-                    p.setId(rs.getInt("id"));
-                    p.setNome(rs.getString("nome"));
-                    p.setDescrizione(rs.getString("descrizione"));
-                    p.setCategoria(rs.getString("categoria"));
-                    p.setTipoBevanda(rs.getString("tipo_bevanda"));
-                    p.setPrezzo(rs.getBigDecimal("prezzo"));
-                    p.setImmagineUrl(rs.getString("immagine_url"));
-                    lista.add(p);
+                    lista.add(mapRow(rs));
                 }
             }
+            return lista;
 
         } catch (SQLException e) {
-            throw new RuntimeException("Errore in findBevandeByTipo(" + tipoBevanda + ")", e);
+            throw new DAOException("Errore DB in PiattoDAO.findBevandeByTipo(tipoBevanda=" + tipoBevanda + ")", e);
         }
-
-        return lista;
     }
 
-    /**
-     * Restituisce tutti i piatti della tabella, senza filtri.
-     */
-    public List<Piatto> findAll() {
+    /** Restituisce tutti i piatti della tabella, senza filtri. */
+    public List<Piatto> findAll() throws DAOException {
         List<Piatto> lista = new ArrayList<>();
 
         String sql =
@@ -172,41 +118,18 @@ public class PiattoDAO {
              ResultSet rs = ps.executeQuery()) {
 
             while (rs.next()) {
-                Piatto p = new Piatto();
-                p.setId(rs.getInt("id"));
-                p.setNome(rs.getString("nome"));
-                p.setDescrizione(rs.getString("descrizione"));
-                p.setCategoria(rs.getString("categoria"));
-                p.setTipoBevanda(rs.getString("tipo_bevanda"));
-                // Usiamo SEMPRE BigDecimal per i soldi
-                p.setPrezzo(rs.getBigDecimal("prezzo"));
-                p.setImmagineUrl(rs.getString("immagine_url"));
-                lista.add(p);
+                lista.add(mapRow(rs));
             }
+            return lista;
 
         } catch (SQLException e) {
-            throw new RuntimeException("Errore nella findAll()", e);
+            throw new DAOException("Errore DB in PiattoDAO.findAll()", e);
         }
-
-        return lista;
     }
-
-    // ------------------------------------------------------------------------
-    //  INSERT
-    // ------------------------------------------------------------------------
-
-    /**
-     * Inserisce un nuovo piatto nel DB.
-     *
-     * NOTA:
-     * - tipo_bevanda può essere NULL per piatti normali (primi, secondi, dolci, ecc.)
-     * - per le bevande, setta categoria = "bevanda" e tipoBevanda = es. "vini", "birre", ecc.
-     */
-    public void insert(Piatto p) {
+    public void insert(Piatto p) throws DAOException {
 
         String sql =
-                "INSERT INTO piatto " +
-                        "  (nome, descrizione, categoria, tipo_bevanda, prezzo, immagine_url) " +
+                "INSERT INTO piatto (nome, descrizione, categoria, tipo_bevanda, prezzo, immagine_url) " +
                         "VALUES (?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = getConnection();
@@ -215,14 +138,48 @@ public class PiattoDAO {
             ps.setString(1, p.getNome());
             ps.setString(2, p.getDescrizione());
             ps.setString(3, p.getCategoria());
-            ps.setString(4, p.getTipoBevanda());        // può essere NULL
+            ps.setString(4, p.getTipoBevanda()); // può essere NULL
             ps.setBigDecimal(5, p.getPrezzo());
             ps.setString(6, p.getImmagineUrl());
 
             ps.executeUpdate();
 
         } catch (SQLException e) {
-            throw new RuntimeException("Errore nella insert()", e);
+            throw new DAOException("Errore DB in PiattoDAO.insert(nome=" + p.getNome() + ")", e);
         }
+    }
+    public Piatto findById(int id) throws DAOException {
+        String sql =
+                "SELECT id, nome, descrizione, categoria, tipo_bevanda, prezzo, immagine_url " +
+                        "FROM piatto WHERE id = ?";
+
+        try (Connection conn = getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, id);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return mapRow(rs);
+                } else {
+                    return null; // nessun piatto con quell'id
+                }
+            }
+
+        } catch (SQLException e) {
+            throw new DAOException("Errore DB in PiattoDAO.findById(id=" + id + ")", e);
+        }
+    }
+
+    private Piatto mapRow(ResultSet rs) throws SQLException {
+        Piatto p = new Piatto();
+        p.setId(rs.getInt("id"));
+        p.setNome(rs.getString("nome"));
+        p.setDescrizione(rs.getString("descrizione"));
+        p.setCategoria(rs.getString("categoria"));
+        p.setTipoBevanda(rs.getString("tipo_bevanda"));
+        p.setPrezzo(rs.getBigDecimal("prezzo"));
+        p.setImmagineUrl(rs.getString("immagine_url"));
+        return p;
     }
 }

@@ -97,8 +97,8 @@
         <label for="indirizzo">Indirizzo (solo per domicilio)</label>
         <input type="text" id="indirizzo" name="indirizzo" placeholder="Via, numero, città">
 
-        <label for="orario">Orario desiderato (opzionale)</label>
-        <input type="time" id="orario" name="orario">
+        <label for="orario">Orario desiderato</label>
+        <input type="time" id="orario" name="orario" required>
 
         <small>
             Dopo aver confermato, potrai scegliere i piatti dal menù

@@ -1,6 +1,6 @@
 package DAO;
 
-import Controller.Bean.Utente;
+import controller.Bean.Utente;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -9,7 +9,6 @@ import java.sql.SQLException;
 
 public class UtenteDAO {
 
-    // NIENTE DataSource, niente costruttore JNDI
 
     private Connection getConnection() throws SQLException {
         return ConnectionFactory.getConnection();
@@ -43,6 +42,36 @@ public class UtenteDAO {
 
         } catch (SQLException e) {
             throw new RuntimeException("Errore durante il login", e);
+        }
+    }
+    public boolean existsByUsername(String username) throws SQLException {
+        String sql = "SELECT 1 FROM utente WHERE username = ?";
+
+        try (Connection conn = getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, username);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                return rs.next(); // true se esiste almeno una riga
+            }
+        }
+    }
+
+    public void insert(Utente u) throws SQLException {
+        String sql = "INSERT INTO utente (username, password, nome, cognome, ruolo) " +
+                "VALUES (?, ?, ?, ?, ?)";
+
+        try (Connection conn = getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, u.getUsername());
+            ps.setString(2, u.getPassword());
+            ps.setString(3, u.getNome());
+            ps.setString(4, u.getCognome());
+            ps.setString(5, u.getRuolo());
+
+            ps.executeUpdate();
         }
     }
 }

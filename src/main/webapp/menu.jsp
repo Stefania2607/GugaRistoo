@@ -418,7 +418,9 @@
             <button class="tab-btn" data-target="secondo">Secondi</button>
             <button class="tab-btn" data-target="contorno">Contorni</button>
             <button class="tab-btn" data-target="dolce">Dolci</button>
-            <a href="<%= contextPath %>/bevande" class="tab-btn bevande-link">Bevande</a>
+<a href="<%= contextPath %>/bevande" class="tab-btn bevande-link">Bevande</a>
+
+
         </div>
 
         <%

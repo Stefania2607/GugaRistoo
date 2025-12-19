@@ -598,11 +598,9 @@ document.addEventListener("DOMContentLoaded", function () {
             a.classList.toggle("active", m === currentMacro && s === currentSotto);
         });
     }
-
-    // 🔥 EVENT DELEGATION: gestiamo tutti i click dal contenitore unico
     menu.addEventListener("click", function (e) {
         const link = e.target.closest("a");
-        if (!link) return;          // non hai cliccato su un link, ignora
+        if (!link) return;
 
         e.preventDefault();
 

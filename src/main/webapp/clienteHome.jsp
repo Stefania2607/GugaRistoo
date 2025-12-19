@@ -33,14 +33,13 @@
             position: relative;
         }
 
-        /* Sfondo: bar + luci animate, in linea con login.jsp */
         body::before {
             content: "";
             position: fixed;
             inset: 0;
             background-image:
                 linear-gradient(120deg, rgba(0,0,0,0.7), rgba(0,0,0,0.3)),
-                url("Images/login-bg-bar.jpg"); /* stessa immagine del login */
+                url("Images/login-bg-bar.jpg");
             background-size: cover;
             background-position: center;
             filter: blur(2px);
@@ -317,6 +316,22 @@
                 padding: 22px 18px 18px;
             }
         }
+        /* --- UNIFORMITÀ DELLE CARD --- */
+        .choice-card {
+            min-height: 185px;             /* altezza uniforme */
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .choice-card .choice-title {
+            min-height: 42px;              /* titoli allineati */
+        }
+
+        .choice-card .choice-desc {
+            min-height: 60px;              /* descrizioni allineate */
+        }
+
     </style>
 </head>
 <body>
@@ -331,104 +346,141 @@
                 </div>
                 <div class="brand-pill">Area cliente</div>
                 <p class="welcome">
-                    Accesso riuscito, <strong><%= u.getNome() != null ? u.getNome() : u.getUsername() %></strong>!<br>
+                    Accesso riuscito,
+                    <strong><%= u.getNome() != null ? u.getNome() : u.getUsername() %></strong>!<br>
                     Scegli cosa desideri fare:
                 </p>
             </div>
-<div style="text-align: right;">
-    <div class="status-pill">
-        <span class="status-dot"></span>
-        <span>Cliente autenticato</span>
-    </div>
-    <form action="logout" method="post" style="margin-top: 8px;">
-        <button type="submit" class="logout-btn">Esci</button>
-    </form>
-</div>
-</div> <!-- chiusura del blocco header/saluto, come avevi prima -->
-
-<div class="choices">
-    <!-- SOLO PRENOTAZIONE TAVOLO -->
-    <a href="prenotaTavolo">
-        <div class="choice-card">
-            <div class="choice-content">
-                <div class="choice-badge">Sala & Tavoli</div>
-                <div class="choice-title">Prenota un tavolo</div>
-                <p class="choice-desc">
-                    Scegli data, orario e numero di persone.
-                    Arrivi e trovi il tavolo pronto.
-                </p>
-                <div class="choice-pill">
-                    <span class="choice-dot dot-gold"></span>
-                    <span>Prenotazione semplice</span>
+            <div style="text-align: right;">
+                <div class="status-pill">
+                    <span class="status-dot"></span>
+                    <span>Cliente autenticato</span>
                 </div>
+                <form action="logout" method="post" style="margin-top: 8px;">
+                    <button type="submit" class="logout-btn">Esci</button>
+                </form>
             </div>
         </div>
-    </a>
 
-    <!-- PRENOTA TAVOLO + ORDINA IN ANTICIPO -->
-    <a href="ordinaSmart">
-        <div class="choice-card">
-            <div class="choice-content">
-                <div class="choice-badge">Ordini al ristorante</div>
-                <div class="choice-title">Prenota & ordina in anticipo</div>
-                <p class="choice-desc">
-                    Prenoti il tavolo e scegli già cosa mangiare.
-                    Quando arrivi è tutto pronto.
-                </p>
-                <div class="choice-pill">
-                    <span class="choice-dot dot-pink"></span>
-                    <span>Esperienza completa</span>
+        <div class="choices">
+            <!-- SOLO PRENOTAZIONE TAVOLO -->
+            <a href="prenotaTavolo">
+                <div class="choice-card">
+                    <div class="choice-content">
+                        <div class="choice-badge">Sala & Tavoli</div>
+                        <div class="choice-title">Prenota un tavolo</div>
+                        <p class="choice-desc">
+                            Scegli data, orario e numero di persone.
+                            Arrivi e trovi il tavolo pronto.
+                        </p>
+                        <div class="choice-pill">
+                            <span class="choice-dot dot-gold"></span>
+                            <span>Prenotazione semplice</span>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>
-    </a>
+            </a>
 
-    <!-- GESTIONE PRENOTAZIONI -->
-    <a href="prenotazioni">
-        <div class="choice-card">
-            <div class="choice-content">
-                <div class="choice-badge">Le tue prenotazioni</div>
-                <div class="choice-title">Visualizza prenotazioni</div>
-                <p class="choice-desc">
-                    Controlla le prenotazioni attive, cancellale
-                    oppure aggiungine di nuove.
-                </p>
-                <div class="choice-pill">
-                    <span class="choice-dot dot-gold"></span>
-                    <span>Gestione prenotazioni</span>
+            <!-- PRENOTA TAVOLO + ORDINA IN ANTICIPO -->
+            <a href="ordinaSmart">
+                <div class="choice-card">
+                    <div class="choice-content">
+                        <div class="choice-badge">Ordini al ristorante</div>
+                        <div class="choice-title">Prenota & ordina in anticipo</div>
+                        <p class="choice-desc">
+                            Prenoti il tavolo e scegli già cosa mangiare.
+                            Quando arrivi è tutto pronto.
+                        </p>
+                        <div class="choice-pill">
+                            <span class="choice-dot dot-pink"></span>
+                            <span>Esperienza completa</span>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>
-    </a>
+            </a>
 
-    <!-- SOLO ORDINE (DOMICILIO / ASPORTO) -->
-    <a href="ordinaDaCasa">
-        <div class="choice-card">
-            <div class="choice-content">
-                <div class="choice-badge">Delivery & Asporto</div>
-                <div class="choice-title">Ordina da casa</div>
-                <p class="choice-desc">
-                    Scegli i piatti e ricevili a domicilio
-                    oppure ritirali al locale.
-                </p>
-                <div class="choice-pill">
-                    <span class="choice-dot dot-cyan"></span>
-                    <span>Domicio / Asporto</span>
+            <!-- GESTIONE PRENOTAZIONI -->
+            <a href="prenotazioni">
+                <div class="choice-card">
+                    <div class="choice-content">
+                        <div class="choice-badge">Le tue prenotazioni</div>
+                        <div class="choice-title">Visualizza prenotazioni</div>
+                        <p class="choice-desc">
+                            Controlla le prenotazioni attive, cancellale
+                            oppure aggiungine di nuove.
+                        </p>
+                        <div class="choice-pill">
+                            <span class="choice-dot dot-gold"></span>
+                            <span>Gestione prenotazioni</span>
+                        </div>
+                    </div>
                 </div>
-            </div>
+            </a>
+
+            <!-- SOLO ORDINE (DOMICILIO / ASPORTO) -->
+            <a href="ordinaDaCasa">
+                <div class="choice-card">
+                    <div class="choice-content">
+                        <div class="choice-badge">Delivery & Asporto</div>
+                        <div class="choice-title">Ordina da casa</div>
+                        <p class="choice-desc">
+                            Scegli i piatti e ricevili a domicilio
+                            oppure ritirali al locale.
+                        </p>
+                        <div class="choice-pill">
+                            <span class="choice-dot dot-cyan"></span>
+                            <span>Domicio / Asporto</span>
+                        </div>
+                    </div>
+                </div>
+            </a>
+
+            <!-- STORICO ORDINI -->
+            <a href="storicoOrdini">
+                <div class="choice-card">
+                    <div class="choice-content">
+                        <div class="choice-badge">I tuoi ordini</div>
+                        <div class="choice-title">Storico ordini</div>
+                        <p class="choice-desc">
+                            Rivedi gli ordini passati, controlla i dettagli
+                            e riordina velocemente i tuoi preferiti.
+                        </p>
+                        <div class="choice-pill pill-small">
+                            <span class="choice-dot dot-gold"></span>
+                            <span>Ordini passati</span>
+                        </div>
+                    </div>
+                </div>
+            </a>
+
+
+
+            <!-- LASCIA UNA RECENSIONE -->
+            <a href="lasciaRecensione">
+                <div class="choice-card">
+                    <div class="choice-content">
+                        <div class="choice-badge">Feedback</div>
+                        <div class="choice-title">Lascia una recensione</div>
+                        <p class="choice-desc">
+                            Valuta la tua esperienza e aiuta altri utenti.
+                        </p>
+                        <div class="choice-pill pill-small">
+                            <span class="choice-dot dot-pink"></span>
+                            <span>Lascia un’opinione</span>
+                        </div>
+                    </div>
+                </div>
+            </a>
+
         </div>
-    </a>
-</div>
-
-
 
         <div class="footer">
             <div>
                 Accesso come <span>Cliente</span>.
-                In futuro qui potrai vedere anche le tue <span>prenotazioni</span> e i <span>preferiti</span>.
+                Qui puoi gestire <span>prenotazioni</span>, <span>ordini</span> e il tuo <span>feedback</span>.
             </div>
             <div>
-                GugaRistò &mdash; esperienze guidate tra <span>tavoli</span> e <span>ordini smart</span>.
+                GugaRistò &mdash; esperienze guidate tra <span>tavoli</span>, <span>ordini smart</span> e <span>recensioni</span>.
             </div>
         </div>
     </div>

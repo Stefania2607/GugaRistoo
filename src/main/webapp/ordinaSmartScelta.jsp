@@ -58,32 +58,4 @@
         }
     </style>
 </head>
-<body>
-<div class="shell">
-    <h1>Ordina smart</h1>
-    <div class="subtitle">
-        Scegli il tipo di esperienza che vuoi fare.
-    </div>
-
-    <div class="options">
-        <!-- Prenotazione + ordine in anticipo -->
-        <a href="prenotaETOrdina" class="opt-card">
-            <div class="opt-title">Prenota tavolo + Ordina in anticipo</div>
-            <div class="opt-desc">
-                Prenoti il tavolo e scegli subito i piatti.
-                Quando arrivi è tutto pronto.
-            </div>
-        </a>
-
-        <!-- Per ora ti rimanda a una servlet per delivery/asporto (puoi riusare /ordinaDaCasa) -->
-        <a href="ordinaDaCasa" class="opt-card">
-            <div class="opt-title">Ordina a domicilio / asporto</div>
-            <div class="opt-desc">
-                Scegli cosa mangiare e ricevilo a casa
-                oppure ritira tutto al ristorante.
-            </div>
-        </a>
-    </div>
-</div>
-</body>
 </html>
